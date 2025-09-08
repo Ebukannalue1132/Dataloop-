@@ -1,0 +1,136 @@
+/* General Reset */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #000000, #b8860b);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+}
+
+/* Header */
+.page-header {
+  width: 100%;
+  text-align: center;
+  background: #111;
+  padding: 15px;
+  border-bottom: 2px solid gold;
+}
+.page-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: gold;
+}
+
+/* Loading Animation */
+.loading-container {
+  text-align: center;
+  margin: 30px 0;
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.loader span {
+  width: 12px;
+  height: 12px;
+  background: gold;
+  border-radius: 50%;
+  animation: bounce 1s infinite ease-in-out;
+}
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+.loader span:nth-child(4) { animation-delay: 0.6s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+.loading-container p {
+  margin-top: 10px;
+  color: #ffd700;
+}
+
+/* Payment Info Boxes */
+.payment-info {
+  width: 100%;
+  max-width: 500px;
+}
+.info-box {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid gold;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+.info-box h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  color: #ffd700;
+}
+.copy-btn {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: gold;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.copy-btn:hover {
+  background: #e0b300;
+}
+
+/* Info Message */
+.info-msg {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+}
+.modal-content p {
+  margin: 15px 0;
+}
+.warning-icon {
+  font-size: 2rem;
+  color: red;
+}
+#proceedBtn {
+  padding: 10px 15px;
+  background: gold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#proceedBtn:hover {
+  background: #e0b300;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .page-header h1 { font-size: 1.2rem; }
+  .info-box h3 { font-size: 1rem; }
+}
