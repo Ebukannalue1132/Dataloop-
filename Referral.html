@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral</title>
+  <link rel="icon" type="image/png" href="images/Icon.png">
+  <link rel="stylesheet" href="css/Referral.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+  <!-- Referral Header -->
+  <div class="referral-header">
+    <div class="left">
+      <h3>Referral Commission</h3>
+      <p id="commissionAmount">₦0.00 <i id="toggleEye" class="fa fa-eye-slash"></i></p>
+      <a href="Withdarw.html" class="withdraw-btn">Withdraw</a>
+    </div>
+
+    <div class="right">
+      <h3>Your Referrals</h3>
+      <p><i class="fa fa-users"></i> <span id="referralCount">0 Person(s)</span></p>
+    </div>
+  </div>
+
+  <!-- Welcome User -->
+  <div class="welcome-box">
+    <h2 id="welcomeUser">Welcome, Guest!</h2>
+  </div>
+
+  <!-- Referral Link Section -->
+  <div class="referral-box">
+    <h3>Your Referral Link</h3>
+    <div class="link-container">
+      <input type="text" id="referralLink" readonly="">
+      <button id="copyBtn"><i class="fa fa-copy"></i> Copy</button>
+    </div>
+  </div>
+
+  <!-- Invite Text -->
+  <div class="invite-text">
+    <p>Copy your link and invite your friends.</p>
+    <p>For everybody that registers through your link, you’ll earn ₦500</p>
+  </div>
+
+  <!-- WhatsApp Button -->
+  <button id="whatsappBtn"><i class="fab fa-whatsapp"></i> Invite using WhatsApp</button>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Referral link copied!</div>
+
+  <!-- Footer -->
+  <footer>
+    <a href="Home.html"><i class="fa fa-home"></i><p>Home</p></a>
+    <a href="Referral.html" class="active"><i class="fa fa-users"></i><p>Referral</p></a>
+    <a href="Contact.html"><i class="fa fa-envelope"></i><p>Contact</p></a>
+    <a href="Terms.html"><i class="fa fa-file-alt"></i><p>Terms</p></a>
+  </footer>
+  <!-- Loader -->
+<div class="loader" id="loader"></div>
+
+<!-- Alert Box -->
+<div id="alertBox" class="alert-box"></div>
+
+
+  <!-- JavaScript -->
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwpv7I2axYSHSqmO66uGGJRkZNdrK8Hdv0LOQIpnPm4-vJaxjkdRpac2mgXsnXhQE7E/exec";
+
+  // ====== Load Current User ======
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const currentEmail = localStorage.getItem("loggedInUser");
+  const firstName = localStorage.getItem("firstName") || "Guest";
+  const currentUser = users.find(u => u.email === currentEmail);
+
+  const domain = "https://dataloop.name.ng";
+  let referralLink = "";
+  let referralCode = "guest";
+
+  document.getElementById("welcomeUser").textContent = `Welcome, ${firstName}!`;
+
+  if (currentUser) {
+    if (!currentUser.referralCode) {
+      currentUser.referralCode = btoa(currentUser.email).slice(0, 8);
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    referralCode = currentUser.referralCode;
+
+    const safeName = firstName.replace(/\s+/g, "");
+    referralLink = `${domain}/?ref=${referralCode}`;
+    document.getElementById("referralLink").value = referralLink;
+
+    // Fetch latest stats from backend
+    fetch(`${WEB_APP_URL}?action=getReferral&code=${referralCode}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("referralCount").textContent = `${data.referrals} Person(s)`;
+          document.getElementById("commissionAmount").innerHTML = `₦${data.earning} <i id="toggleEye" class="fa fa-eye-slash"></i>`;
+        }
+      })
+      .catch(err => console.error("Error fetching referral data:", err));
+  }
+
+  // ====== Detect Referral (When Someone Signs Up via Link) ======
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get("ref");
+  if (refCode) {
+    // Notify backend: increment referral count + add ₦500
+    fetch(`${WEB_APP_URL}?action=addReferral&code=${refCode}`)
+      .then(res => res.json())
+      .then(data => console.log("Referral tracked:", data))
+      .catch(err => console.error("Error tracking referral:", err));
+  }
+
+  // ====== Copy Referral Link with Toast ======
+  const toast = document.getElementById("toast");
+  document.getElementById("copyBtn").addEventListener("click", () => {
+    if (referralLink) {
+      navigator.clipboard.writeText(referralLink).then(() => {
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2000);
+      });
+    }
+  });
+
+  // ====== WhatsApp Share ======
+  document.getElementById("whatsappBtn").addEventListener("click", () => {
+    if (!referralLink) {
+      alert("Please log in to get your referral link.");
+      return;
+    }
+    const message = `🚀 Hi, I'm ${firstName}! Join me on Data Loop and earn rewards. Sign up with my referral link: ${referralLink}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+  });
+
+  // ====== Toggle Commission Balance ======
+  const commissionText = document.getElementById("commissionAmount");
+  document.addEventListener("click", (e) => {
+    if (e.target.id === "toggleEye") {
+      const toggleEye = e.target;
+      let isHidden = toggleEye.classList.contains("fa-eye");
+      if (isHidden) {
+        commissionText.firstChild.textContent = `₦0.00 `;
+        toggleEye.classList.remove("fa-eye");
+        toggleEye.classList.add("fa-eye-slash");
+      } else {
+        commissionText.firstChild.textContent = "•••••• ";
+        toggleEye.classList.remove("fa-eye-slash");
+        toggleEye.classList.add("fa-eye");
+      }
+    }
+  });
+</script>
+<script>
+  
+  // ===== Loader Control =====
+const loader = document.getElementById("loader");
+function showLoader() {
+  loader.style.display = "block";
+}
+function hideLoader() {
+  loader.style.display = "none";
+}
+
+// ===== Alert Control =====
+const alertBox = document.getElementById("alertBox");
+function showAlert(message, type = "info") {
+  alertBox.textContent = message;
+  alertBox.className = `alert-box alert-${type} show`;
+  setTimeout(() => {
+    alertBox.classList.remove("show");
+  }, 3000);
+}
+
+// ====== Copy Referral Link with Toast & Alert ======
+document.getElementById("copyBtn").addEventListener("click", () => {
+  if (referralLink) {
+    navigator.clipboard.writeText(referralLink).then(() => {
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+
+      // New Alert
+      showAlert("Referral link copied!", "success");
+    });
+  }
+});
+
+// ====== WhatsApp Share ======
+document.getElementById("whatsappBtn").addEventListener("click", () => {
+  if (!referralLink) {
+    alert("Please log in to get your referral link.");
+    return;
+  }
+  const message = `🚀 Hi, I'm ${firstName}! Join me on Data Loop and earn rewards. Sign up with my referral link: ${referralLink}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+
+  // New Alert
+  showAlert("WhatsApp opened to share your link!", "info");
+});
+
+</script>
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwpv7I2axYSHSqmO66uGGJRkZNdrK8Hdv0LOQIpnPm4-vJaxjkdRpac2mgXsnXhQE7E/exec";
+
+// ===== Toast Notification =====
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add("show"), 100);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+// ===== Load User Data from Backend =====
+function loadReferralData() {
+  const userID = localStorage.getItem("loggedInUser");
+
+  if (!userID) {
+    showToast("⚠️ Please log in first.");
+    setTimeout(() => (window.location.href = "SignUp.html"), 2000);
+    return;
+  }
+
+  fetch(`${WEB_APP_URL}?action=getUser&userID=${encodeURIComponent(userID)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Save referral code locally for sharing
+        localStorage.setItem("referralCode", data.referralCode);
+
+        // Update UI
+        document.getElementById("referralsCount").textContent = data.referrals;
+        document.getElementById("commissionAmount").textContent = "₦" + data.earning;
+
+        // Build referral link
+        const referralLink = `${window.location.origin}/SignUp.html?ref=${data.referralCode}`;
+        document.getElementById("referralLink").value = referralLink;
+      } else {
+        showToast("⚠️ User not found.");
+      }
+    })
+    .catch(err => {
+      console.error("Error fetching data:", err);
+      showToast("❌ Network error. Try again.");
+    });
+}
+
+// ===== Copy Referral Link =====
+function copyReferralLink() {
+  const linkInput = document.getElementById("referralLink");
+  linkInput.select();
+  document.execCommand("copy");
+  showToast("✅ Referral link copied!");
+}
+
+// ===== Share on WhatsApp =====
+function shareWhatsApp() {
+  const referralLink = document.getElementById("referralLink").value;
+  const message = `🚀 Join me on DataLoop and earn rewards! Use my referral link: ${referralLink}`;
+  const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  window.open(whatsappURL, "_blank");
+}
+
+// ===== Event Listeners =====
+document.addEventListener("DOMContentLoaded", () => {
+  loadReferralData();
+  document.getElementById("copyBtn").addEventListener("click", copyReferralLink);
+  document.getElementById("whatsappBtn").addEventListener("click", shareWhatsApp);
+});
+</script>
+
+
+
+</body></html>

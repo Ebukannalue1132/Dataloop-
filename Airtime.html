@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X5WTC2KED3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X5WTC2KED3');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airtime</title>
+  <link rel="stylesheet" href="css/Airtime1.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h2>Airtime</h2>
+    <a href="#">History</a>
+  </header>
+
+  <!-- Body -->
+  <main class="container">
+    <!-- Phone Input Section -->
+    <div class="phone-section">
+      <div class="logo-holder" id="logoHolder" style="background-image: none; background-color: var(--chip);">
+        <i id="defaultIcon" class="fa fa-sim-card" style="display: block;"></i>
+      </div>
+      <div class="input-area">
+        <input type="tel" id="phoneNumber" placeholder="Enter Nigerian phone number">
+        <small>Nigerian numbers (11 digits)</small>
+      </div>
+      <div class="user-icon">
+        <i class="fa fa-user"></i>
+      </div>
+    </div>
+
+    <!-- Buy Normal Airtime -->
+    <button class="primary-btn" onclick="window.location.href='normal-airtime.html'">Buy Normal Airtime Bondo</button>
+
+    <!-- Airtime Bundle Options -->
+    <div class="bundle-buttons">
+      <button>₦500 Airtime – Pay ₦450</button>
+      <button>₦1,200 Airtime – Pay ₦1,000</button>
+      <button>₦2,500 Airtime – Pay ₦2,000</button>
+      <button>₦6,000 Airtime – Pay ₦5,000</button>
+      <button>₦12,000 Airtime – Pay ₦10,000</button>
+      <button>₦25,000 Airtime – Pay ₦20,000</button>
+      <button>₦3,000 Airtime – Pay ₦2,500</button>
+      <button>₦7,000 Airtime – Pay ₦6,000</button>
+      <button>₦15,000 Airtime – Pay ₦12,000</button>
+      <button>₦30,000 Airtime – Pay ₦25,000</button>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <i class="fa fa-exclamation-triangle warning-icon"></i>
+      <p>You don’t have enough money on your wallet balance.<br>
+      Please fund your wallet with the account details provided.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="Home.html"><i class="fa fa-home"></i><p>Home</p></a>
+    <a href="Referral.html"><i class="fa fa-users"></i><p>Referral</p></a>
+    <a href="Contact.html"><i class="fa fa-headset"></i><p>Contact</p></a>
+    <a href="Terms.html"><i class="fa fa-file-alt"></i><p>Terms</p></a>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const phoneInput = document.getElementById("phoneNumber");
+    const logoHolder = document.getElementById("logoHolder");
+    const defaultIcon = document.getElementById("defaultIcon");
+    const modal = document.getElementById("modal");
+    const bundleButtons = document.querySelectorAll(".bundle-buttons button");
+
+    // Network prefix definitions + logos
+    const NETWORKS = {
+      mtn: {
+        name: "MTN",
+        prefixes: ["07025","07026","0703","0704","0706","0803","0806","0810","0813","0814","0816","0903","0906","0913","0916"],
+        logoUrl: "Images/Mtn.png"
+      },
+      airtel: {
+        name: "Airtel",
+        prefixes: ["0701","0702","0708","0802","0808","0812","0901","0902","0904","0907","0911","0912"],
+        logoUrl: "Images/Airtel.png"
+      },
+      glo: {
+        name: "Glo",
+        prefixes: ["0705","0805","0807","0811","0815","0905","0915"],
+        logoUrl: "Images/Glo.png"
+      },
+      mobile9: {
+        name: "9mobile",
+        prefixes: ["0809","0817","0818","0908","0909"],
+        logoUrl: "Images/9 mobile.png"
+      }
+    };
+
+    // Reset to default SIM card icon
+    function resetLogo() {
+      logoHolder.style.backgroundImage = 'none';
+      logoHolder.style.backgroundColor = 'var(--chip)';
+      defaultIcon.style.display = "block";
+    }
+
+    // Set detected logo
+    function setLogo(netKey) {
+      const net = NETWORKS[netKey];
+      if (!net) { resetLogo(); return; }
+      logoHolder.style.backgroundImage = `url('${net.logoUrl}')`;
+      logoHolder.style.backgroundColor = 'transparent';
+      logoHolder.style.backgroundSize = "contain";
+      logoHolder.style.backgroundRepeat = "no-repeat";
+      logoHolder.style.backgroundPosition = "center";
+      defaultIcon.style.display = "none";
+    }
+
+    // Detect network from input
+    function detectNetwork(number) {
+      if (!number || number.length < 4) { resetLogo(); return; }
+      for (const key in NETWORKS) {
+        if (NETWORKS[key].prefixes.some(prefix => number.startsWith(prefix))) {
+          setLogo(key);
+          return;
+        }
+      }
+      resetLogo();
+    }
+
+    // Real-time detection
+    phoneInput.addEventListener("input", () => detectNetwork(phoneInput.value));
+
+    // Show modal on bundle click
+    bundleButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        modal.style.display = "flex"; // Show modal
+        // Redirect after 6 seconds
+        setTimeout(() => {
+          window.location.href = "Payment.html";
+        }, 6000);
+      });
+    });
+
+    resetLogo();
+  </script>
+
+
+</body></html>

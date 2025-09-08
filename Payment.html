@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X5WTC2KED3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X5WTC2KED3');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fund with Bank Transfer</title>
+  <link rel="icon" type="image/png" href="images/Icon.png">
+  <link rel="stylesheet" href="css/payment.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Fund with Bank Transfer</h1>
+  </header>
+
+  <!-- Loading Animation -->
+  <div class="loading-container">
+    <div class="loader">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <p>Waiting for payment...</p>
+  </div>
+
+  <!-- Payment Info Section -->
+  <section class="payment-info">
+    <div class="info-box">
+      <h3>Bank Name</h3>
+      <p id="bankName">SMARTCASH PSB</p>
+    </div>
+    <div class="info-box">
+      <h3>Account Name</h3>
+      <p id="accountName"> NNALUE CHIAMAKA CHARITY</p>
+    </div>
+    <div class="info-box">
+      <h3>Account Number</h3>
+      <p id="accountNumber">9070810971</p>
+      <button class="copy-btn" id="copyBtn"><i class="fa fa-copy"></i> Copy</button>
+    </div>
+  </section>
+
+  <!-- Info Message -->
+  <p class="info-msg">Amount transferred to the above account will automatically reflect on your wallet.</p>
+
+  <!-- Timeout Modal -->
+  <div class="modal" id="timeoutModal">
+    <div class="modal-content">
+      <i class="fa fa-exclamation-triangle warning-icon"></i>
+      <p>We have received your payment, but our system has detected an error. Please click on the proceed button to make a report.</p>
+      <button id="proceedBtn">Proceed</button>
+    </div>
+  </div>
+
+  <script>
+    // ===== Copy to Clipboard =====
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      const accNum = document.getElementById("accountNumber").textContent.trim();
+      if (accNum) {
+        navigator.clipboard.writeText(accNum).then(() => {
+          alert("Account number copied!");
+        });
+      } else {
+        alert("No account number to copy.");
+      }
+    });
+
+    // ===== Timeout Modal (3 minutes of inactivity) =====
+    let timeout;
+    function resetTimer() {
+      clearTimeout(timeout);
+      timeout = setTimeout(showModal, 180000); // 3 min = 180000ms
+    }
+
+    function showModal() {
+      document.getElementById("timeoutModal").style.display = "flex";
+    }
+
+    // Monitor user activity
+    ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
+      document.addEventListener(evt, resetTimer);
+    });
+    resetTimer();
+
+    // ===== Proceed Button =====
+    document.getElementById("proceedBtn").addEventListener("click", () => {
+      const msg = encodeURIComponent("Greetings, I have made deposit to my wallet, but it's not reflecting.");
+      window.location.href = `Contact.html?prefill=${msg}`;
+    });
+  </script>
+
+
+</body></html>

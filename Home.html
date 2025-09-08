@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Dashboard</title>
+<link rel="icon" type="image/png" href="images/Icon.png">
+<link rel="stylesheet" href="css/Home.css">
+<!-- <link rel="stylesheet" href="Data.css"> -->
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="css/all.min.css">
+</head>
+
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="left">
+        <i class="fa fa-user-circle"></i>
+        <span id="greeting">Hi, User</span>
+    </div>
+    <div class="right">
+        <a href="Contact.html"><i class="fa fa-headset"></i></a>
+        <a href="Home.html"><i class="fa fa-bell"></i></a>
+    </div>
+</div>
+
+<!-- Wallet Section -->
+<!-- <div class="wallet-card">
+    <div class="wallet-header">
+        <span>Wallet Balance <i class="fa fa-eye"></i></span>
+        <a href="history.html" class="btn-history">History</a>
+    </div>
+    <div class="wallet-amount">₦0.00</div>
+    <a href="fund-wallet.html" class="btn-fund">Fund Wallet</a>
+</div> -->
+<div class="wallet-card">
+    <div class="wallet-header">
+        <span>Wallet Balance 
+            <i id="toggleBalance" class="fa fa-eye"></i>
+        </span>
+        <a href="History.html" class="btn-history">History</a>
+    </div>
+    <div id="walletAmount" class="wallet-amount">₦0.00</div>
+    <a href="Payment.html" class="btn-fund">Fund Wallet</a>
+</div>
+ <!-- Sliding Alert Banner -->
+  <div class="alert-banner">
+    <div class="alert-text">
+      For the first purchase of Data above ₦1000, you will get extra 2GB for 7days  free. And you can also earn money from our Referral programe, each referral you will get ₦500
+    </div>
+  </div>
+
+
+<!-- Main Button Grid -->
+<div class="grid-container">
+    <a href="Data.html" class="grid-item"><i class="fa fa-wifi"></i><p>Buy Data</p></a>
+    <a href="Airtime.html" class="grid-item"><i class="fa fa-signal"></i><p>Buy Airtime</p></a>
+    <a href="Contact.html" class="grid-item"><i class="fa fa-headphones"></i><p>Contact</p></a>
+    <a href="Bet.html" class="grid-item"><i class="fa fa-futbol"></i><p>Betting</p></a>
+    <a href="Loan.html" class="grid-item"><i class="fa fa-landmark"></i><p>Loan</p></a>
+    <a href="Referral.html" class="grid-item"><i class="fa fa-users"></i><p>Invite & Earn</p></a>
+</div>
+
+<!-- Footer Navigation -->
+<div class="footer-nav">
+    <a href="Home.html"><i class="fa fa-home"></i><p>Home</p></a>
+    <a href="Referral.html"><i class="fa fa-user-friends"></i><p>Referral</p></a>
+    <a href="Contact.html"><i class="fa fa-headphones"></i><p>Contact</p></a>
+    <a href="Terms.html"><i class="fa fa-file-alt"></i><p>Terms</p></a>
+</div>
+
+<script>
+    // Retrieve first name from localStorage
+    const storedName = localStorage.getItem("firstName") || "User";
+    document.getElementById("greeting").textContent = `Hi, ${storedName}`;
+</script>
+<script>
+    const toggleBtn = document.getElementById("toggleBalance");
+    const walletAmount = document.getElementById("walletAmount");
+
+    let isVisible = true;
+    const actualBalance = "₦0.00"; // This could be dynamic in the future
+
+    toggleBtn.addEventListener("click", () => {
+        isVisible = !isVisible;
+        if (isVisible) {
+            walletAmount.textContent = actualBalance;
+            toggleBtn.classList.remove("fa-eye-slash");
+            toggleBtn.classList.add("fa-eye");
+        } else {
+            walletAmount.textContent = "****";
+            toggleBtn.classList.remove("fa-eye");
+            toggleBtn.classList.add("fa-eye-slash");
+        }
+    });
+</script>
+
+
+
+
+</body></html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head>
+    <!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X5WTC2KED3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X5WTC2KED3');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan</title>
+  <link rel="icon" type="image/png" href="images/Icon.png">
+  <link rel="stylesheet" href="css/Loan.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Loan</h1>
+    <a href="Contact.html" class="support-btn"><i class="fa fa-headset"></i></a>
+  </header>
+
+  <!-- Loan Options Section -->
+  <main class="loan-container">
+    <!-- Loan Box -->
+    <div class="loan-box">
+      <i class="fa fa-wallet loan-icon"></i>
+      <h3>Loan Cash</h3>
+      <p><strong>Amount:</strong> ₦5,000</p>
+      <p><strong>Loan Period:</strong> 10 days</p>
+      <p><strong>Daily Interest:</strong> 5%</p>
+      <button class="activate-btn">Activate Now</button>
+    </div>
+
+    <div class="loan-box">
+      <i class="fa fa-wallet loan-icon"></i>
+      <h3>Loan Cash</h3>
+      <p><strong>Amount:</strong> ₦10,000</p>
+      <p><strong>Loan Period:</strong> 20 days</p>
+      <p><strong>Daily Interest:</strong> 10%</p>
+      <button class="activate-btn">Activate Now</button>
+    </div>
+
+    <div class="loan-box">
+      <i class="fa fa-wallet loan-icon"></i>
+      <h3>Loan Cash</h3>
+      <p><strong>Amount:</strong> ₦15,000</p>
+      <p><strong>Loan Period:</strong> 30 days</p>
+      <p><strong>Daily Interest:</strong> 15%</p>
+      <button class="activate-btn">Activate Now</button>
+    </div>
+
+    <div class="loan-box">
+      <i class="fa fa-wallet loan-icon"></i>
+      <h3>Loan Cash</h3>
+      <p><strong>Amount:</strong> ₦20,000</p>
+      <p><strong>Loan Period:</strong> 40 days</p>
+      <p><strong>Daily Interest:</strong> 10%</p>
+      <button class="activate-btn">Activate Now</button>
+    </div>
+
+    <div class="loan-box">
+      <i class="fa fa-wallet loan-icon"></i>
+      <h3>Loan Cash</h3>
+      <p><strong>Amount:</strong> ₦25,000</p>
+      <p><strong>Loan Period:</strong> 50 days</p>
+      <p><strong>Daily Interest:</strong> 10%</p>
+      <button class="activate-btn">Activate Now</button>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="loanModal" class="modal">
+    <div class="modal-content">
+      <i class="fa fa-exclamation-triangle warning-icon"></i>
+      <h2>Not Eligible</h2>
+      <p>You are not eligible to activate loan at this time. To be qualified, you are required to invite at least five people to Data Loop.</p>
+      <p class="info">Please complete this requirement to proceed with your application.</p>
+      <div class="modal-actions">
+        <button id="okBtn">OK</button>
+        <button id="proceedBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="Home.html"><i class="fa fa-home"></i><p>Home</p></a>
+    <a href="Referral.html"><i class="fa fa-users"></i><p>Referral</p></a>
+    <a href="Contact.html"><i class="fa fa-phone"></i><p>Contact</p></a>
+    <a href="Terms.html"><i class="fa fa-file-alt"></i><p>Terms</p></a>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.querySelectorAll(".activate-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.getElementById("loanModal").style.display = "flex";
+      });
+    });
+
+    document.getElementById("okBtn").addEventListener("click", () => {
+      document.getElementById("loanModal").style.display = "none";
+    });
+
+    document.getElementById("proceedBtn").addEventListener("click", () => {
+      window.location.href = "Referral.html";
+    });
+
+    // Close modal if clicked outside
+    window.addEventListener("click", (e) => {
+      const modal = document.getElementById("loanModal");
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+
+
+
+</body></html>

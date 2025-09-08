@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data</title>
+  <link rel="icon" type="image/png" href="../../dataloop.name.ng/Images/Icon.png">
+  <link rel="stylesheet" href="../../dataloop.name.ng/Airtime1.css">
+  <!-- <link rel="stylesheet" href="Data.css"> -->
+  <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h2>Data</h2>
+    <a href="#">History</a>
+  </header>
+
+  <!-- Sliding Alert Banner -->
+  <div class="alert-banner">
+    <div class="alert-text">
+      For the first purchase of Data above ₦1000, you will get extra 2GB for 7days  free.
+    </div>
+  </div>
+
+  <!-- Body -->
+  <main class="container">
+    <!-- Phone Input Section -->
+    <div class="phone-section">
+      <div class="logo-holder" id="logoHolder" style="background-image: none; background-color: var(--chip);">
+        <i id="defaultIcon" class="fa fa-sim-card" style="display: block;"></i>
+      </div>
+      <div class="input-area">
+        <input type="tel" id="phoneNumber" placeholder="Enter Nigerian phone number">
+        <small>Nigerian numbers (11 digits)</small>
+      </div>
+      <div class="user-icon">
+        <i class="fa fa-user"></i>
+      </div>
+    </div>
+
+    <!-- Buy Normal Data -->
+    <button class="primary-btn" onclick="window.location.href='normaldata.html'">Buy Normal Data Bundle</button>
+
+    <!-- Data Bundle Options -->
+    <div class="bundle-buttons">
+      <button>1GB – ₦200 2days</button>
+      <button>1.5GB – ₦300 7days</button>
+      <button>2GB – ₦500 7days</button>
+      <button>3GB – ₦700 7days</button>
+      <button>5GB – ₦1,000 14days</button>
+      <button>10GB – ₦2,000 14days</button>
+      <button>15GB – ₦2,500 30days</button>
+      <button>20GB – ₦3,000 30days</button>
+      <button>25GB – ₦4,000 30days</button>
+      
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="Home.html"><i class="fa fa-home"></i><p>Home</p></a>
+    <a href="Referral.html"><i class="fa fa-users"></i><p>Referral</p></a>
+    <a href="Contact.html"><i class="fa fa-headset"></i><p>Contact</p></a>
+    <a href="Terms.html"><i class="fa fa-file-alt"></i><p>Terms</p></a>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modalOverlay" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <i class="fa fa-exclamation-triangle"></i>
+      <p>You don’t have enough money on your wallet balance. Please fund your wallet with the account details provided.</p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const phoneInput = document.getElementById("phoneNumber");
+    const logoHolder = document.getElementById("logoHolder");
+    const defaultIcon = document.getElementById("defaultIcon");
+    const modalOverlay = document.getElementById("modalOverlay");
+
+    // Network prefix definitions + logos
+    const NETWORKS = {
+      mtn: {
+        prefixes: ["07025","07026","0703","0704","0706","0803","0806","0810","0813","0814","0816","0903","0906","0913","0916"],
+        logoUrl: "Images/Mtn.png"
+      },
+      airtel: {
+        prefixes: ["0701","0702","0708","0802","0808","0812","0901","0902","0904","0907","0911","0912"],
+        logoUrl: "Images/Airtel.png"
+      },
+      glo: {
+        prefixes: ["0705","0805","0807","0811","0815","0905","0915"],
+        logoUrl: "Images/Glo.png"
+      },
+      mobile9: {
+        prefixes: ["0809","0817","0818","0908","0909"],
+        logoUrl: "Images/9 mobile.png"
+      }
+    };
+
+    function resetLogo() {
+      logoHolder.style.backgroundImage = 'none';
+      logoHolder.style.backgroundColor = 'var(--chip)';
+      defaultIcon.style.display = "block";
+    }
+
+    function setLogo(netKey) {
+      const net = NETWORKS[netKey];
+      if (!net) { resetLogo(); return; }
+      logoHolder.style.backgroundImage = `url('${net.logoUrl}')`;
+      logoHolder.style.backgroundColor = 'transparent';
+      logoHolder.style.backgroundSize = "contain";
+      logoHolder.style.backgroundRepeat = "no-repeat";
+      logoHolder.style.backgroundPosition = "center";
+      defaultIcon.style.display = "none";
+    }
+
+    function detectNetwork(number) {
+      if (!number || number.length < 4) { resetLogo(); return; }
+      for (const key in NETWORKS) {
+        if (NETWORKS[key].prefixes.some(prefix => number.startsWith(prefix))) {
+          setLogo(key);
+          return;
+        }
+      }
+      resetLogo();
+    }
+
+    phoneInput.addEventListener("input", () => {
+      detectNetwork(phoneInput.value);
+    });
+
+    resetLogo();
+
+    // Modal behavior on bundle button click
+    document.querySelectorAll(".bundle-buttons button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        modalOverlay.style.display = "flex";
+        setTimeout(() => {
+          window.location.href = "Payment.html";
+        }, 7000);
+      });
+    });
+  </script>
+
+
+</body></html>

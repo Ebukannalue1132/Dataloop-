@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up / Login</title>
+<link rel="icon" type="image/png" href="images/Icon.png">
+<link rel="stylesheet" href="css/Main.css">
+<!-- skjfbkbf -->
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Loop - Fast & Reliable Services</title>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://dataloop.name.ng">
+
+  <!-- Open Graph Meta Tags (Facebook, WhatsApp, Telegram, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dataloop.name.ng">
+  <meta property="og:title" content="Data Loop - Fast & Reliable Services">
+  <meta property="og:description" content="Join Data Loop today and enjoy secure, and affordable data, airtime, and utility services. Earn rewards through our referral program!">
+  <meta property="og:image" content="images/Icon.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://dataloop.name.ng">
+  <meta name="twitter:title" content="Data Loop - Fast & Reliable Services">
+  <meta name="twitter:description" content="Join Data Loop today and enjoy secure, and affordable data, airtime, and utility services. Earn rewards through our referral program!">
+  <meta name="twitter:image" content="https://dataloop.name.ng/Images/Icon.png">
+
+  
+
+<!-- Font Awesome for Eye Icons -->
+<link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+<div class="form-container" id="formBox">
+    <h1>📡<span class="me">Data Loop</span></h1>
+    <h3>Sign Up</h3>
+    <input type="text" id="fullName" placeholder="Full Name" required="">
+    <input type="email" id="email" placeholder="Email or Phone Number" required="">
+
+    <div class="password-container">
+        <input type="password" id="createPassword" placeholder="Create Password" required="">
+        <i class="fa fa-eye toggle-password" data-target="createPassword"></i>
+    </div>
+
+    <div class="password-container">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required="">
+        <i class="fa fa-eye toggle-password" data-target="confirmPassword"></i>
+    </div>
+
+    <button class="btn btn-signup" id="signupBtn">Sign Up</button>
+
+    <p class="text-center">Already have an account?</p>
+    <button class="btn btn-login" id="loginBtn">Login</button>
+</div>
+
+<script>
+// ===== Helper Functions =====
+function getUsers() {
+    return JSON.parse(localStorage.getItem("users")) || [];
+}
+
+function saveUsers(users) {
+    localStorage.setItem("users", JSON.stringify(users));
+}
+
+function showMessage(message, type = "error") {
+    let oldAlert = document.querySelector(".form-alert");
+    if (oldAlert) oldAlert.remove();
+
+    const alertDiv = document.createElement("div");
+    alertDiv.className = `form-alert ${type}`;
+    alertDiv.textContent = message;
+    document.querySelector(".form-container").prepend(alertDiv);
+
+    setTimeout(() => alertDiv.remove(), 4000);
+}
+
+// ===== Generate Unique Referral Code =====
+function generateReferralCode(email) {
+    return btoa(email).slice(0, 8); // simple unique code
+}
+
+// ===== Sign Up Logic =====
+document.addEventListener("click", function (e) {
+    if (e.target.id === "signupBtn") {
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const createPassword = document.getElementById("createPassword").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+        if (!fullName || !email || !createPassword || !confirmPassword) {
+            showMessage("All fields are required.");
+            return;
+        }
+
+        if (createPassword.length < 8) {
+            showMessage("Password must be at least 8 characters long.");
+            return;
+        }
+
+        if (createPassword !== confirmPassword) {
+            showMessage("Passwords do not match.");
+            return;
+        }
+
+        let users = getUsers();
+
+        if (users.some(user => user.email.toLowerCase() === email.toLowerCase())) {
+            showMessage("Account already exists. Please log in instead.");
+            return;
+        }
+
+        const referralCode = generateReferralCode(email);
+
+        users.push({
+            fullName,
+            email,
+            password: createPassword,
+            referralCode
+        });
+        saveUsers(users);
+
+        // Save session
+        localStorage.setItem("firstName", fullName.split(" ")[0]);
+        localStorage.setItem("loggedInUser", email);
+
+        window.location.href = "Home.html";
+    }
+});
+
+// ===== Switch to Login Form =====
+document.addEventListener("click", function (e) {
+    if (e.target.id === "loginBtn") {
+        const formBox = document.getElementById("formBox");
+        formBox.innerHTML = `
+            <h1>📡<span class="me">Data Loop</span></h1>
+            <h3>Login</h3>
+            <input type="text" id="loginEmail" placeholder="Email or Phone" required>
+
+            <div class="password-container">
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <i class="fa fa-eye toggle-password" data-target="loginPassword"></i>
+            </div>
+
+            <button class="btn btn-login" id="loginSubmit">Login</button>
+        `;
+    }
+});
+
+// ===== Login Validation =====
+document.addEventListener("click", function (e) {
+    if (e.target.id === "loginSubmit") {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value.trim();
+
+        if (!email || !password) {
+            showMessage("Please fill in both fields.");
+            return;
+        }
+
+        let users = getUsers();
+        let foundUser = users.find(user => 
+            user.email.toLowerCase() === email.toLowerCase() && 
+            user.password === password
+        );
+
+        if (foundUser) {
+            localStorage.setItem("firstName", foundUser.fullName.split(" ")[0]);
+            localStorage.setItem("loggedInUser", foundUser.email);
+            window.location.href = "Home.html";
+        } else {
+            showMessage("Invalid login credentials.");
+        }
+    }
+});
+
+// ===== Password Eye Toggle =====
+document.addEventListener("click", function(e) {
+    if (e.target.classList.contains("toggle-password")) {
+        const targetId = e.target.getAttribute("data-target");
+        const input = document.getElementById(targetId);
+        if (input.type === "password") {
+            input.type = "text";
+            e.target.classList.remove("fa-eye");
+            e.target.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            e.target.classList.remove("fa-eye-slash");
+            e.target.classList.add("fa-eye");
+        }
+    }
+});
+</script>
+
+
+
+</body></html>
